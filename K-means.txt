@@ -1,0 +1,13 @@
+Entrada:
+K --> Número de clusters
+Conjunto de pontos
+
+1) Criar K centroides e posicioná-los em posições aleatórias
+
+2) Enquanto algum ponto mudar de cluster:
+	2.1) Para cada ponto no conjunto de pontos:
+		2.1.1) Ache o centróide mais próximo deste ponto
+		2.1.2) Atribua o ponto ao cluster representado pelo centróide mais próximo
+
+	2.2) Para cada cluster:
+		2.2.1) Recalcular a posição do centróide referente a este cluster através da média da posição de todos os pontos atribuidos a este cluster
