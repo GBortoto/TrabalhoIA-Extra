@@ -15,6 +15,16 @@ class ListOfPoints():
     def plotPoints(self, mode, dimentionX=0, dimentionY=1):
         plt.plot(self.getDimention(dimentionX), self.getDimention(dimentionY), mode)
 
+    def findAllPointsWith(self, value, dimention):
+        filteredPoints = []
+        for i in range(len(self.points)):
+            if(self.points[i][dimention] == value):
+                filteredPoints.append(self.points[i] + [i])
+        result = ListOfPoints(len(filteredPoints), len(filteredPoints[0]), self.maxRange)
+        for i in range(len(filteredPoints)):
+            result.points[i] = filteredPoints[i]
+        return result
+
     def __str__(self):
         return str(self.points)
 

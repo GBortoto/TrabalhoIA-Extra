@@ -6,26 +6,32 @@ from ListOfPoints import ListOfPoints
 
 class KMeans():
     def __init__(self, dataPoints: ListOfPoints, NGroups:int):
+        # Lista de dados -> N * (x, y)
         self.dataPoints = dataPoints
+
+        # Lista de centroides -> NGroups * (x, y)
         self.centroids = ListOfPoints(NGroups, 2, 100)
-        self.distances = ListOfPoints(len(dataPoints), NGroups, 100)
-        self.nearest = ListOfPoints(len(dataPoints), 2, 100)
-        self.clusters = ListOfPoints(len(dataPoints), 1, NGroups)
-        #self.done = False        
-        
+
+        # Lista de distâncias -> NGroups * (float)
+        self.distances = [0.0 for i in range(NGroups)]
+
+        # Lista de centróides mais proximos e seus respectivos clusters -> N * (x, y, ClusterID)
+        self.nearest = ListOfPoints(len(dataPoints), 3, 100)
+
+        # Setar posições aleatórias para os centróides
         for i in range(NGroups):
             self.centroids.points[i] = [random.random()*self.centroids.maxRange for i in range(2)]
             
 
     def distance(self, pointA, pointB):
         # Eucledean Distance
-        return math.sqrt(sum([math.pow(pointA[i] - pointB[i], 2) for i in range(len(pointA)-1)]))
-            
+        return math.sqrt(
+            sum(
+                [(pointA[i] - pointB[i])**2 for i in range(len(pointA))]
+                )
+            )
     
-    def calculate(self):
-        print('Entrou em calculate')
-        #while(not self.done):
-
+    def findNearestCentroid(self):
         # Para cada ponto
         for i in range(len(self.dataPoints)):
             # e para cada centroide
@@ -35,27 +41,31 @@ class KMeans():
                 #print('(i:' + str(i) + ', j:' + str(j) + ')')
 
                 # Calcula a distância do centróide atual para o ponto atual
-                self.distances.points[i][j] = self.distance(self.dataPoints.points[i], self.centroids.points[j])
+                self.distances[j] = self.distance(self.dataPoints.points[i], self.centroids.points[j])
 
                 # Caso a distância calculada for menor do que a distância mínima já calculada 
-                if(self.distances.points[i][j] <= self.distances.points[i][nearestCentroidIndex]):
+                if(self.distances[j] <= self.distances[nearestCentroidIndex]):
                     # Então este centróide passa a ser o mais próximo
-                    self.nearest.points[i] = self.centroids.points[j]
+                    self.nearest.points[i] = [self.centroids.points[j][0], self.centroids.points[j][1], j]
                     # e a variável de index do centróide mais próximo é atualizada com a posição desse centroide na lista de centroides 
                     nearestCentroidIndex = j
 
-            # Depois de encontrar o centróide mais proximo, atribua o ponto ao cluster representado pelo centróide mais próximo
-            self.clusters.points[i] = j
-
-        # Para cada cluster
+    def recalculateCentroids(self):
+        # Para cada centróide
         for i in range(len(self.centroids)):
-            # Recalcular a posição do centróide referente a este cluster através da média da posição de todos os pontos atribuidos a este cluster
-            self.centroids.points[i] =
-            for j in range(len(self.dataPoints)):
-                
-                if():
-                
-            [sum(self.centroids.getDimention(0))/len(self.centroids),
-                                        sum(self.centroids.getDimention(1))/len(self.centroids)]
-        print('Saiu de calculate')
-        #self.done = True
+            indexes_pointsInCluster = self.nearest.findAllPointsWith(i, 2).getDimention(3)
+            pointsInCluster = ListOfPoints(len(indexes_pointsInCluster), 2, 100)
+            for j in range(len(pointsInCluster)):
+                pointsInCluster.points[j] = self.dataPoints.points[indexes_pointsInCluster[j]]
+
+            #print('pointsInCluster')
+            #print(pointsInCluster)
+            
+            meanX = sum(pointsInCluster.getDimention(0)) / len(pointsInCluster)
+            meanY = sum(pointsInCluster.getDimention(1)) / len(pointsInCluster)
+            
+            self.centroids.points[i] = [meanX, meanY]
+
+    def run(self):
+        self.findNearestCentroid()
+        self.recalculateCentroids()

@@ -6,11 +6,19 @@ import time
 import sys
 import _thread
 
-def executeCode(a, b):
-    for i in range(10, 100):
-        time.sleep(0.5)
-        data.points.append([random() * 100, random() * 100])
-
+def executeCode(kmeans, plotter):
+    #time.sleep(5)
+    for i in range(19):
+        time.sleep(1)
+        print('iteração ' + str(i+2))
+        kmeans.run()
+        #print(kmeans.centroids)
+        '''
+        plotter.data = kmeans.dataPoints
+        plotter.centroids = kmeans.centroids
+        plotter.nearest = kmeans.nearest
+        '''
+        
 def hidePlotterOnDemand(plotter, b):
     text = ""
     while(text.lower() != 'p'):
@@ -19,22 +27,23 @@ def hidePlotterOnDemand(plotter, b):
     
 
 if __name__ == '__main__':
-    print('Ponto 1')
-    data = ListOfPoints(100, 2, 100)
-    data.points = [[random()*100, random()*100] for i in range(100)]
-    print('Ponto 2')
+    #print('Ponto 1')
+    data = ListOfPoints(100, 2, 200)
+    data.points = [[random()*100, random()*100] for i in range(200)]
+    #print('Ponto 2')
     kmeans = KMeans(data, 4)
-    kmeans.calculate()
-    print('Ponto 3')
-    plotter = HP(kmeans.dataPoints, kmeans.centroids, kmeans.clusters)
-    print('Ponto 4')
+    print('Iteração 1')
+    kmeans.run()
+    #print('Ponto 3')
+    plotter = HP(kmeans.dataPoints, kmeans.centroids, kmeans.nearest)
+    #print('Ponto 4')
     
     try:
-        #_thread.start_new_thread(executeCode, (0, 0))
-        _thread.start_new_thread(hidePlotterOnDemand, (plotter, 0))
-        print('Ponto 5')
+        _thread.start_new_thread(executeCode, (kmeans, plotter))
+        #_thread.start_new_thread(hidePlotterOnDemand, (plotter, 0))
+        #print('Ponto 5')
         plotter.show()
-        print('Ponto 6')
+        #print('Ponto 6')
         
     except Exception as e:
         print(e)
