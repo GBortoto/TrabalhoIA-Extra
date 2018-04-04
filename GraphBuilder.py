@@ -7,9 +7,9 @@ import sys
 import _thread
 
 def executeCode(kmeans, plotter):
-    #xtime.sleep(5)
+    time.sleep(1.5)
     for i in range(29):
-        #time.sleep(1.5)
+        time.sleep(1.5)
         print('iteração ' + str(i+2))
         kmeans.run()
         #print(kmeans.centroids)
@@ -28,22 +28,23 @@ def hidePlotterOnDemand(plotter, b):
 
 if __name__ == '__main__':
     #print('Ponto 1')
-    data = ListOfPoints(100, 2, 100)
-    data.points = [[random()*100, random()*100] for i in range(100)]
+    n = 500
+    data = ListOfPoints(n, 2, 100)
+    data.points = [[random()*100, random()*100] for i in range(n)]
     #print('Ponto 2')
     kmeans = KMeans(data, 4)
     print('Iteração 1')
     kmeans.run()
     #print('Ponto 3')
-    plotter= None
-    #plotter = HP(kmeans.dataPoints, kmeans.centroids, kmeans.nearest)
+    #plotter= None
+    plotter = HP(kmeans.dataPoints, kmeans.centroids, kmeans.nearest, 500)
     #print('Ponto 4')
     
     try:
         _thread.start_new_thread(executeCode, (kmeans, plotter))
         #_thread.start_new_thread(hidePlotterOnDemand, (plotter, 0))
         #print('Ponto 5')
-        #plotter.show()
+        plotter.show()
         #print('Ponto 6')
         
     except Exception as e:
