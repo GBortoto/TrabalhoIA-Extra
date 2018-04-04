@@ -8,7 +8,7 @@ import sys
 import random
 
 class HarryPlotter():
-    def __init__(self, data:ListOfPoints, centroids:ListOfPoints, nearest:ListOfPoints, refreshRate:int=500):
+    def __init__(self, data:ListOfPoints, centroids:ListOfPoints, nearest:ListOfPoints, refreshRate:int=1000):
         """Recebe um ListOfPoints e cria um gráfico dinâmico"""
         # Cria ambiente onde o plot acontecerá
         self.fig = plt.figure()
@@ -55,6 +55,7 @@ class HarryPlotter():
                     style = 'm'
 
                 self.ax1.plot(self.data.points[i][0], self.data.points[i][1], style + 'o')
+
                 
                 self.ax1.plot([self.data.points[i][0], self.nearest.points[i][0]],
                               [self.data.points[i][1], self.nearest.points[i][1]], style + '-')
