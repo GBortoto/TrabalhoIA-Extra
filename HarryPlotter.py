@@ -8,7 +8,7 @@ import sys
 import random
 
 class HarryPlotter():
-    def __init__(self, data:ListOfPoints, centroids:ListOfPoints, clusters:ListOfPoints, refreshRate:int=10000000):
+    def __init__(self, data:ListOfPoints, centroids:ListOfPoints, clusters:ListOfPoints, refreshRate:int=1000):
         """Recebe um ListOfPoints e cria um gráfico dinâmico"""
         # Cria ambiente onde o plot acontecerá
         self.fig = plt.figure()
@@ -18,6 +18,9 @@ class HarryPlotter():
         self.data = data
         self.centroids = centroids
         self.clusters = clusters
+        print(data)
+        print(centroids)
+        print(clusters)
 
         # Seta uma função de animação ao ambiente atual que atualiza a cada "refreshRate" milésimos
         self.ani = animation.FuncAnimation(self.fig, self.animate, refreshRate)
@@ -27,8 +30,11 @@ class HarryPlotter():
         # Limpar gráfico
         self.ax1.clear()
 
+        #print(self.data)
+        
         # Plotar todos os pontos em data
-        for i in range(len(data)):
+        for i in range(len(self.data)):
+            
             style = 'k.'
             if(self.clusters.points[i] == 0):
                 style = 'r.'
@@ -37,22 +43,18 @@ class HarryPlotter():
             elif(self.clusters.points[i] == 2):
                 style = 'b.'
             elif(self.clusters.points[i] == 3):
-                style = 'p.'
+                style = 'm.'
 
             self.ax1.plot(self.data.points[i][0], self.data.points[i][1], style)
+        '''
             
-
+        '''
         # Plotar todos os centroides
+        self.ax1.plot(self.centroids.points[0][0], self.centroids.points[0][1], 'rs')
+        self.ax1.plot(self.centroids.points[1][0], self.centroids.points[1][1], 'gs')
+        self.ax1.plot(self.centroids.points[2][0], self.centroids.points[2][1], 'bs')
+        self.ax1.plot(self.centroids.points[3][0], self.centroids.points[3][1], 'ms')
         
-        for i in range(len(centroids)):
-            style = 'ks'
-            if():
-                
-            self.ax1.plot(self.centroids.points[i][0], self.centroids.points[i][0], style)
-
-
-        self.ax1.plot(self.centroids.getDimention(0), self.centroids.getDimention(1),'rs')
-
     def show(self):
         # Mostrar gráfico
         plt.show()
