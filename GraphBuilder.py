@@ -5,19 +5,14 @@ from random import random
 import time
 import sys
 import _thread
+import math
 
-def executeCode(kmeans, plotter):
-    time.sleep(1.5)
+def executeCode(kmeans, timeVariable):
+    time.sleep(timeVariable)
     for i in range(29):
-        time.sleep(1.5)
+        time.sleep(timeVariable)
         print('iteração ' + str(i+2))
         kmeans.run()
-        #print(kmeans.centroids)
-        '''
-        plotter.data = kmeans.dataPoints
-        plotter.centroids = kmeans.centroids
-        plotter.nearest = kmeans.nearest
-        '''
         
 def hidePlotterOnDemand(plotter, b):
     text = ""
@@ -27,25 +22,19 @@ def hidePlotterOnDemand(plotter, b):
     
 
 if __name__ == '__main__':
-    #print('Ponto 1')
     n = 500
+    timeVariable = math.log(n, 5) - 1.8
     data = ListOfPoints(n, 2, 100)
     data.points = [[random()*100, random()*100] for i in range(n)]
-    #print('Ponto 2')
-    kmeans = KMeans(data, 4)
+    kmeans = KMeans(data, 5)
     print('Iteração 1')
     kmeans.run()
-    #print('Ponto 3')
-    #plotter= None
-    plotter = HP(kmeans.dataPoints, kmeans.centroids, kmeans.nearest, 500)
-    #print('Ponto 4')
+    plotter = HP(kmeans.dataPoints, kmeans.centroids, kmeans.nearest, 1000 * timeVariable)
     
     try:
-        _thread.start_new_thread(executeCode, (kmeans, plotter))
+        _thread.start_new_thread(executeCode, (kmeans, timeVariable))
         #_thread.start_new_thread(hidePlotterOnDemand, (plotter, 0))
-        #print('Ponto 5')
         plotter.show()
-        #print('Ponto 6')
         
     except Exception as e:
         print(e)
