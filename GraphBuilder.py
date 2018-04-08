@@ -8,12 +8,12 @@ import _thread
 import math
 
 def executeCode(kmeans, timeVariable):
-    time.sleep(timeVariable)
-    for i in range(29):
-        time.sleep(timeVariable)
+    #time.sleep(timeVariable)
+    for i in range(99):
+        #time.sleep(timeVariable)
         print('iteração ' + str(i+2))
         kmeans.run()
-        
+    
 def hidePlotterOnDemand(plotter, b):
     text = ""
     while(text.lower() != 'p'):
@@ -22,19 +22,25 @@ def hidePlotterOnDemand(plotter, b):
     
 
 if __name__ == '__main__':
-    n = 500
+    
+    n = 50000
+    NGroups = 6
+
+    
     timeVariable = math.log(n, 5) - 1.8
     data = ListOfPoints(n, 2, 100)
     data.points = [[random()*100, random()*100] for i in range(n)]
-    kmeans = KMeans(data, 5)
+    kmeans = KMeans(data, NGroups)
     print('Iteração 1')
     kmeans.run()
     plotter = HP(kmeans.dataPoints, kmeans.centroids, kmeans.nearest, 1000 * timeVariable)
     
     try:
-        _thread.start_new_thread(executeCode, (kmeans, timeVariable))
-        #_thread.start_new_thread(hidePlotterOnDemand, (plotter, 0))
+        #_thread.start_new_thread(executeCode, (kmeans, timeVariable))
+        executeCode(kmeans, timeVariable)
         plotter.show()
+        #_thread.start_new_thread(hidePlotterOnDemand, (plotter, 0))
+        #plotter.show()
         
     except Exception as e:
         print(e)
